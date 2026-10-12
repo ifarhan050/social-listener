@@ -170,7 +170,7 @@ These features were inspired by [Agent Reach](https://github.com/Panniantong/age
 Runs are **manual by default**. Ask for what you want in Cowork:
 
 ```
-/find 20 negative faysal bank last month
+/find 20 negative acme bank last month
 /find 10 scam posts in https://www.facebook.com/groups/123456 this year
 /find 15 leads tuition last 7 days
 /find 5 complaints from 2026-03-01 to 2026-03-31 facebook only

@@ -13,7 +13,7 @@ Help a beginner feel confident in under a minute. Use short sentences and no jar
 2. Show a **status line**:
    - "✅ Ready", or "⚠️ 1 thing needs you: <plain fix>" (e.g. Facebook needs a new login → `/connect-facebook`; an update is available → "say *update the agent*").
 3. Show **what it does**, in 2 lines: it looks through Facebook groups and pages, news, RSS, YouTube and Reddit for what you asked for, reads like a person (only reading, never posting), and saves the matches as a report and a spreadsheet (CSV) in your folder.
-4. Show **"Things you can ask"**: 6–8 prompts from `prompts/getting-started.md`, **filled in with the user's own mission** (brand, area, type). Use real values from `list_missions` instead of placeholders, e.g. "Find 20 negative posts about Faysal Bank from last month".
+4. Show **"Things you can ask"**: 6–8 prompts from `prompts/getting-started.md`, **filled in with the user's own mission** (brand, area, type). Use real values from `list_missions` instead of placeholders, e.g. "Find 20 negative posts about Acme Bank from last month".
 5. Show **handy commands**, one line each:
 
 | Command | What it does |

@@ -19,7 +19,7 @@ Extract these from the user's words or the command arguments:
 | `platforms` | Only if they limited sources ("only Facebook", "news only"). |
 | `when` | Use a `preset` (`today`, `yesterday`, `last_7_days`, `last_30_days`, `last_90_days`, `this_month`, `last_month`, `this_year`, `last_year`) or `from` / `to` as YYYY-MM-DD. "last week" → `last_7_days`; "last month" → `last_month`; "in March" → that month's from/to. Default `last_7_days`. |
 
-Confirm it in **one line**, then start without waiting unless something is ambiguous. For example: "Finding 20 negative posts about Faysal Bank, last month, general search (news, RSS, Facebook)."
+Confirm it in **one line**, then start without waiting unless something is ambiguous. For example: "Finding 20 negative posts about Acme Bank, last month, general search (news, RSS, Facebook)."
 
 ## 2. Run the loop
 1. Call `start_find`. If it's refused, tell the user the reason and the fix (busy → try again shortly; Facebook paused → other sources still work with `platforms`).

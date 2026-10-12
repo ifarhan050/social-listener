@@ -1,12 +1,12 @@
 ---
-description: Find N posts of given types in a date range, from given groups or a general search (e.g. /find 20 negative faysal bank last month)
+description: Find N posts of given types in a date range, from given groups or a general search (e.g. /find 20 negative acme bank last month)
 argument-hint: "count types subject [in group URLs] [period]"
 ---
 
 Follow the `find` skill. The request is: $ARGUMENTS
 
 Examples of what users type:
-- `/find 20 negative faysal bank last month`
+- `/find 20 negative acme bank last month`
 - `/find 10 scam posts in https://www.facebook.com/groups/123456 this year`
 - `/find 15 leads tuition last 7 days`
 - `/find 5 complaints from 2026-03-01 to 2026-03-31 facebook only`
