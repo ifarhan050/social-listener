@@ -1,0 +1,80 @@
+<!doctype html>
+<!-- Offline fixture approximating search results inside one Facebook group (not strictly chronological). -->
+<html lang="en">
+<head><meta charset="utf-8"><style>body{font-family:Arial;width:680px;margin:0 auto}.r{background:#fff;margin:10px 0;padding:10px;border:1px solid #ddd}[role="dialog"]{position:fixed;inset:30px;background:#fff;overflow:auto;padding:12px;border:1px solid #999}</style></head>
+<body>
+<div role="banner"><a href="/">Facebook</a></div>
+<div role="navigation">nav</div>
+<div role="main"><div role="feed">
+
+  <div class="r"><div role="article">
+    <h3><a href="https://www.facebook.com/ayesha.k">Ayesha Khan</a></h3>
+    <a href="https://www.facebook.com/groups/testgroup/posts/3001/">2 d</a>
+    <div dir="auto">XYZ Bank deducted money twice from my account and support is not responding. Beware!</div>
+    <div role="button" data-comments="3001">4 comments</div>
+  </div></div>
+
+  <div class="r"><div role="article">
+    <h3><a href="https://www.facebook.com/old.user">Old User</a></h3>
+    <a href="https://www.facebook.com/groups/testgroup/posts/3002/">40 d</a>
+    <div dir="auto">xyzbank old complaint beyond the window</div>
+  </div></div>
+
+  <div class="r"><div role="article">
+    <h3><a href="https://www.facebook.com/XYZBankOfficial">XYZ Bank Official</a></h3>
+    <a href="https://www.facebook.com/groups/testgroup/posts/3003/">5 d</a>
+    <div dir="auto">XYZ Bank: enjoy 0% fees on transfers this month!</div>
+  </div></div>
+
+  <div class="r"><div role="article">
+    <h3><a href="https://www.facebook.com/bilal.r">Bilal Raza</a></h3>
+    <a href="https://www.facebook.com/groups/testgroup/posts/3004/">10 d</a>
+    <div dir="auto">Is xyzbank branch in Gulberg open on Saturday?</div>
+    <div role="button" data-comments="3004">2 comments</div>
+  </div></div>
+
+  <div class="r"><div role="article">
+    <h3><a href="https://www.facebook.com/someone">Someone</a></h3>
+    <a href="https://www.facebook.com/groups/testgroup/posts/3005/">3 d</a>
+    <div dir="auto">Looking for a good tailor in Lahore</div>
+  </div></div>
+
+</div></div>
+<script>
+  const C = {
+    '3001': [
+      { id: '9101', a: 'Hamza', t: 'Same happened to me, still waiting for refund', at: '1 d' },
+      { id: '9102', a: 'Sana', t: 'They are scammers honestly', at: '1 d' },
+      { id: '9103', a: 'Omar', t: 'Mine got resolved in a week', at: '20h' },
+    ],
+    '3001-more': [{ id: '9104', a: 'Nida', t: 'Call the helpline at night, less wait', at: '10h' }],
+    '3004': [
+      { id: '9201', a: 'Ali', t: 'Yes open till 1pm', at: '9 d' },
+      { id: '9202', a: 'Zara', t: 'Staff there is very rude though', at: '9 d' },
+    ],
+  };
+  const html = (pid, c) => `<div role="article" aria-label="Comment by ${c.a} ${c.at}">
+    <a href="https://www.facebook.com/${c.a.toLowerCase()}">${c.a}</a><div dir="auto">${c.t}</div>
+    <a href="https://www.facebook.com/groups/testgroup/posts/${pid}/?comment_id=${c.id}">${c.at}</a></div>`;
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[role="button"]');
+    if (!b) return;
+    if (b.dataset.comments) {
+      const pid = b.dataset.comments;
+      const d = document.createElement('div');
+      d.setAttribute('role', 'dialog');
+      d.innerHTML = `<div class="cl">${(C[pid] || []).map((c) => html(pid, c)).join('')}</div>` +
+        (C[pid + '-more'] ? `<div role="button" data-more="${pid}">View more comments</div>` : '');
+      document.body.appendChild(d);
+    } else if (b.dataset.more) {
+      const pid = b.dataset.more;
+      b.closest('[role="dialog"]').querySelector('.cl').insertAdjacentHTML('beforeend', C[pid + '-more'].map((c) => html(pid, c)).join(''));
+      b.remove();
+    } else if (['Like', 'Comment', 'Share', 'Join group'].includes(b.textContent.trim())) {
+      window.__forbiddenClicks = (window.__forbiddenClicks || 0) + 1;
+    }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('[role="dialog"]').forEach((d) => d.remove()); });
+</script>
+</body>
+</html>

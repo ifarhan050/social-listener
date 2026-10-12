@@ -1,0 +1,6 @@
+# Shell scripts must keep LF line endings (bash on macOS fails on CRLF).
+*.sh text eol=lf
+*.command text eol=lf
+# Windows launchers
+*.cmd text eol=crlf
+*.ps1 text eol=crlf

@@ -1,0 +1,36 @@
+<!doctype html>
+<!--
+  Facebook fills a post's timestamp link (permalink href + full-date tooltip) only on hover.
+  The visible label is a short obfuscated "3d"; the tooltip has the exact date.
+-->
+<html lang="en">
+<head><meta charset="utf-8"></head>
+<body>
+<div role="navigation">nav</div>
+<div role="main">
+  <h1>Test Group</h1>
+  <div role="feed">
+    <div aria-posinset="1">
+      <div role="article" aria-labelledby="h1">
+        <h3 id="h1"><a href="https://www.facebook.com/sara.ahmed">Sara Ahmed</a></h3>
+        <span><a class="ts" href="#" role="link">3d</a></span>
+        <div data-ad-preview="message"><div dir="auto">xyzbank blocked my debit card without any reason and the branch says wait a week</div></div>
+        <div role="button">Like</div><div role="button">Comment</div><div role="button">Share</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('a.ts').forEach((a) => {
+    a.addEventListener('mouseenter', () => {
+      a.href = 'https://www.facebook.com/groups/testgroup/posts/5555/';
+      const tip = document.createElement('div');
+      tip.setAttribute('role', 'tooltip');
+      tip.textContent = 'Saturday, October 3, 2026 at 3:22 PM';
+      document.body.appendChild(tip);
+    });
+    a.addEventListener('mouseleave', () => document.querySelectorAll('[role="tooltip"]').forEach((t) => t.remove()));
+  });
+</script>
+</body>
+</html>

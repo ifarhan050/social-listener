@@ -1,0 +1,143 @@
+<!doctype html>
+<!--
+  Offline fixture approximating a Facebook group feed's semantic structure:
+  role=feed, aria-posinset posts wrapping role=article, dir=auto text blocks,
+  permalink timestamp links, comment-count buttons opening a role=dialog.
+  Class names are deliberately random to prove extraction never relies on them.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Arial, sans-serif; width: 680px; margin: 0 auto; background: #f0f2f5; }
+  .x1a { background: #fff; margin: 12px 0; padding: 12px; border-radius: 8px; }
+  [role="dialog"] { position: fixed; inset: 40px; background: #fff; overflow: auto; padding: 16px; border: 1px solid #ccc; }
+  [role="button"] { cursor: pointer; color: #65676b; display: inline-block; margin-right: 12px; }
+  [role="article"] [role="article"] { margin-left: 24px; background: #f0f2f5; padding: 6px; border-radius: 12px; }
+</style>
+</head>
+<body>
+<div role="banner"><a href="/">Facebook</a></div>
+<div role="navigation">nav</div>
+<div role="main">
+  <h1>Test Group</h1>
+  <div role="feed">
+
+    <!-- Featured / pinned: old, matches keyword; must not trigger cutoff -->
+    <div aria-posinset="1" class="x1a">
+      <div role="article" aria-labelledby="h1">
+        <span class="q9z">Featured</span>
+        <h3 id="h1"><a href="https://www.facebook.com/admin.user">Group Admin</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/9000/?__cft__[0]=abc">October 1, 2025</a>
+        <div dir="auto">Welcome! Rules: no spam about xyzbank promotions.</div>
+      </div>
+    </div>
+
+    <!-- 1: matches in post text (hashtag form), has comments, one comment matches -->
+    <div aria-posinset="2" class="x1a">
+      <div role="article" aria-labelledby="h2">
+        <h3 id="h2"><a href="https://www.facebook.com/ali.khan">Ali Khan</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/1001/?__tn__=R" aria-label="2h">2h</a>
+        <div data-ad-preview="message"><div dir="auto">Has anyone had issues with the #XYZBank app today? Transfers keep failing and the hotline is busy. Really frustrating
+          <div role="button" class="see-more">See more</div></div></div>
+        <div><span aria-label="All reactions: 42">42</span></div>
+        <div role="button" data-comments="1001">14 comments</div>
+        <div role="button">Like</div><div role="button">Comment</div><div role="button">Share</div>
+      </div>
+    </div>
+
+    <!-- 2: no match, few comments, no secondary term → just marked seen -->
+    <div aria-posinset="3" class="x1a">
+      <div role="article">
+        <h3><a href="https://www.facebook.com/sara.m">Sara M</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/1002/">5h</a>
+        <div dir="auto">Selling my old bicycle, good condition, DM me.</div>
+        <div role="button" data-comments="1002">2 comments</div>
+      </div>
+    </div>
+
+    <!-- 3: no match in post; secondary term "card" triggers expansion; a comment mentions "xyz bank" -->
+    <div aria-posinset="4" class="x1a">
+      <div role="article">
+        <h3><a href="https://www.facebook.com/omar.f">Omar F</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/pfbid02XyZabc123/">8h</a>
+        <div dir="auto">Which bank gives the best credit card for online shopping?</div>
+        <div role="button" data-comments="pfbid02XyZabc123">3 comments</div>
+      </div>
+    </div>
+
+    <!-- 4: older than 24h cutoff → stop scanning this target -->
+    <div aria-posinset="5" class="x1a">
+      <div role="article">
+        <h3><a href="https://www.facebook.com/old.poster">Old Poster</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/1004/">3 d</a>
+        <div dir="auto">xyzbank old complaint that is beyond the cutoff.</div>
+      </div>
+    </div>
+
+    <!-- 5: never reached -->
+    <div aria-posinset="6" class="x1a">
+      <div role="article">
+        <h3><a href="https://www.facebook.com/older">Older</a></h3>
+        <a href="https://www.facebook.com/groups/testgroup/posts/1005/">5 d</a>
+        <div dir="auto">xyzbank even older.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const COMMENTS = {
+    '1001': [
+      { id: '5001', author: 'Bilal', text: 'Same here, XYZ Bank app is down since morning', t: '1h' },
+      { id: '5002', author: 'Hina', text: 'Works fine for me', t: '1h' },
+    ],
+    '1001-more': [{ id: '5003', author: 'Zara', text: 'xyzbank support told me it is a server issue', t: '30m' }],
+    '1002': [{ id: '6001', author: 'Kamran', text: 'Price?', t: '4h' }],
+    'pfbid02XyZabc123': [
+      { id: '7001', author: 'Nida', text: 'I use xyz bank platinum card, no complaints', t: '7h' },
+      { id: '7002', author: 'Usman', text: 'Try any bank with cashback', t: '6h' },
+    ],
+  };
+  const commentHtml = (pid, c) => `
+    <div role="article" aria-label="Comment by ${c.author} ${c.t} ago">
+      <a href="https://www.facebook.com/${c.author.toLowerCase()}">${c.author}</a>
+      <div dir="auto">${c.text}</div>
+      <a href="https://www.facebook.com/groups/testgroup/posts/${pid}/?comment_id=${c.id}&__cft__[0]=z">${c.t}</a>
+    </div>`;
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[role="button"]');
+    if (!btn) return;
+    const label = btn.textContent.trim();
+    if (label === 'See more') {
+      btn.insertAdjacentText('beforebegin', ' — EXPANDED TAIL TEXT.');
+      btn.remove();
+    } else if (btn.dataset.comments) {
+      const pid = btn.dataset.comments;
+      const d = document.createElement('div');
+      d.setAttribute('role', 'dialog');
+      d.innerHTML = `<div role="button">Most relevant</div>
+        <div class="cl">${(COMMENTS[pid] || []).map((c) => commentHtml(pid, c)).join('')}</div>
+        ${COMMENTS[pid + '-more'] ? '<div role="button" data-more="' + pid + '">View more comments</div>' : ''}`;
+      document.body.appendChild(d);
+    } else if (btn.dataset.more) {
+      const pid = btn.dataset.more;
+      btn.closest('[role="dialog"]').querySelector('.cl').insertAdjacentHTML('beforeend', COMMENTS[pid + '-more'].map((c) => commentHtml(pid, c)).join(''));
+      btn.remove();
+    } else if (label === 'Most relevant') {
+      const m = document.createElement('div');
+      m.setAttribute('role', 'menu');
+      m.innerHTML = '<div role="menuitem">All comments<span> Show all comments</span></div>';
+      m.addEventListener('click', () => m.remove());
+      document.body.appendChild(m);
+    } else if (['Like', 'Comment', 'Share'].includes(label)) {
+      window.__forbiddenClicks = (window.__forbiddenClicks || 0) + 1;
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('[role="dialog"]').forEach((d) => d.remove());
+  });
+</script>
+</body>
+</html>

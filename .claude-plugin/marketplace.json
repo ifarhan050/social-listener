@@ -1,0 +1,11 @@
+{
+  "name": "social-listener",
+  "owner": { "name": "Farhan Irfan" },
+  "plugins": [
+    {
+      "name": "social-listener",
+      "source": "./plugin",
+      "description": "Find what people say on Facebook, news, YouTube, Reddit and RSS: complaints, scams, leads, competitors or any topic. Read-only and human-paced. Type /start to begin."
+    }
+  ]
+}

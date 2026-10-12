@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Listener</title>
+<style>
+  :root { --bg:#f7f7f5; --fg:#1d1d1b; --muted:#6b6b66; --card:#fff; --line:#e3e2dd; --accent:#2f5bd3; --warn:#b5481f; --ok:#2e7d4f; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#161615; --fg:#ececea; --muted:#9a9a94; --card:#1f1f1d; --line:#33332f; --accent:#7b9cff; --warn:#ff8a5c; --ok:#6fd49b; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .stat { border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  .stat b { display: block; font-size: 18px; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  button { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; font: inherit; cursor: pointer; }
+  button[disabled] { opacity: .5; cursor: not-allowed; }
+  .alert { color: var(--warn); margin: 4px 0; }
+  .ok { color: var(--ok); }
+  .bad { color: var(--warn); }
+  label { display: flex; gap: 8px; align-items: flex-start; }
+  pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; color: var(--muted); }
+  #msg { min-height: 1.5em; }
+  ul { padding-left: 18px; margin: 0; }
+  ol.steps { padding-left: 20px; margin: 0; }
+  ol.steps li { margin: 6px 0; }
+  .keys { display: grid; grid-template-columns: minmax(140px, 220px) 1fr; gap: 8px 12px; align-items: center; }
+  .keys input { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); font: inherit; }
+  @media (max-width: 520px) { .keys { grid-template-columns: 1fr; } }
+  .hint { background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 8px 10px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Social Listener</h1>
+  <p class="sub">Your agent runs on this computer. Ask Claude (Cowork) for searches and reports; this page is for setup and health.</p>
+  <div id="auth" hidden>
+    <section><h2>Open this page from Claude</h2>
+      <p>This page needs its private link. In a Claude Cowork chat say <b>"open the agent's dashboard"</b>.
+      On Windows you can also use Start menu &rarr; <b>Social Listener dashboard</b>.</p></section>
+  </div>
+  <div id="app" hidden>
+    <section id="welcome">
+      <h2>Getting started</h2>
+      <ol class="steps">
+        <li id="step-fb">Log in to Facebook (optional, once) &mdash; see <a href="#facebook">Facebook account</a> below.</li>
+        <li id="step-keys">YouTube / Reddit keys (optional) &mdash; see <a href="#keys">API keys</a> below.</li>
+        <li id="step-claude">Go back to Claude, open a Cowork chat and type <b>/setup</b> (or <b>/start</b> to see what you can ask).</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Overview</h2>
+      <div class="grid" id="stats"></div>
+      <div id="alerts"></div>
+    </section>
+    <section>
+      <h2>Missions</h2>
+      <p class="sub" style="margin:0 0 8px">What this agent is looking for. Create or edit missions from Claude (Cowork): <code>/setup</code>, <code>/new-mission</code>, <code>/missions</code>.</p>
+      <div id="missions"></div>
+    </section>
+    <section>
+      <h2>Platforms</h2>
+      <p class="sub" style="margin:0 0 8px">Switching a platform off keeps its targets and captures; it resumes when switched back on.</p>
+      <div id="platforms"></div>
+    </section>
+    <section id="facebook">
+      <h2>Facebook account</h2>
+      <p>Reading Facebook automatically is against Facebook's terms and can lead to a checkpoint or restriction. The agent only reads, slowly and like a person, within daily limits &mdash; but the risk is not zero. A secondary account is safer.</p>
+      <label><input type="checkbox" id="ack"> I understand and accept the account risk.</label>
+      <p class="hint">Clicking <b>Log in to Facebook</b> opens a normal Chrome window. Log in there (including any code Facebook asks for), then <b>close that window</b>. You only do this once &mdash; the login is kept.</p>
+      <p><button id="connect">Log in to Facebook</button> <button id="scan">Run scan now</button></p>
+      <p id="msg"></p>
+    </section>
+    <section id="keys">
+      <h2>API keys (optional)</h2>
+      <p class="sub" style="margin:0 0 8px">Only needed for YouTube and Reddit. Keys are saved on this computer only and are never shown again. Leave a box empty to keep the current key.</p>
+      <div class="keys">
+        <span>YouTube API key <small id="k-YOUTUBE_API_KEY"></small></span><input type="password" autocomplete="off" data-key="YOUTUBE_API_KEY" placeholder="AIza...">
+        <span>Reddit client id <small id="k-REDDIT_CLIENT_ID"></small></span><input type="password" autocomplete="off" data-key="REDDIT_CLIENT_ID">
+        <span>Reddit client secret <small id="k-REDDIT_CLIENT_SECRET"></small></span><input type="password" autocomplete="off" data-key="REDDIT_CLIENT_SECRET">
+        <span>Reddit user agent <small id="k-REDDIT_USER_AGENT"></small></span><input type="text" autocomplete="off" data-key="REDDIT_USER_AGENT" placeholder="windows:social-listener:0.2.0 (by /u/yourname)">
+      </div>
+      <p><button id="savekeys">Save keys</button> <span id="keysmsg"></span></p>
+    </section>
+    <section>
+      <h2>Targets &amp; keywords</h2>
+      <div class="grid"><div><b>Targets</b><ul id="targets"></ul></div><div><b>Keywords</b><ul id="keywords"></ul></div></div>
+    </section>
+    <section><h2>Doctor</h2><ul id="doctor"></ul></section>
+    <section><h2>Last run</h2><pre id="lastrun"></pre></section>
+  </div>
+</main>
+<script>
+(() => {
+  const frag = new URLSearchParams(location.hash.slice(1));
+  let token = frag.get('token');
+  try { if (token) sessionStorage.setItem('sl_token', token); else token = sessionStorage.getItem('sl_token'); } catch {}
+  if (token) history.replaceState(null, '', location.pathname);
+  if (!token) { document.getElementById('auth').hidden = false; return; }
+  document.getElementById('app').hidden = false;
+
+  const api = async (p, opts = {}) => {
+    const r = await fetch('/api' + p, { ...opts, headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' } });
+    const body = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(body.error || body.reason || r.statusText);
+    return body;
+  };
+  const el = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const msg = (t, bad) => { el('msg').textContent = t; el('msg').className = bad ? 'bad' : 'ok'; };
+
+  async function refresh() {
+    try {
+      const s = await api('/status');
+      const stat = (v, l, cls = '') => `<div class="stat"><b class="${cls}">${esc(v)}</b><span>${esc(l)}</span></div>`;
+      el('stats').innerHTML =
+        stat(s.session.status, 'session', s.session.status === 'ok' ? 'ok' : 'bad') +
+        stat(s.reddit.configured ? s.reddit.status : 'not set up', 'reddit', s.reddit.status === 'ok' ? 'ok' : 'bad') +
+        stat(`${s.budget.daily_used} / ${s.budget.daily_limit}`, 'page loads today') +
+        stat(s.captures_today, 'captures today') +
+        stat(s.sync.pending ?? 0, 'pending sync') +
+        stat(s.busy ?? 'idle', 'activity') +
+        stat(s.can_run === 'yes' ? 'ready' : 'blocked', s.can_run === 'yes' ? 'scheduler' : s.can_run, s.can_run === 'yes' ? 'ok' : 'bad');
+      el('alerts').innerHTML = s.alerts.map((a) => `<p class="alert">⚠ ${esc(a.message)}</p>`).join('');
+      const connecting = s.busy === 'connect';
+      el('step-fb').className = s.session.status === 'ok' ? 'ok' : '';
+      if (s.session.status === 'ok') el('step-fb').innerHTML = '&#10003; Facebook is connected (login kept).';
+      if (connecting) msg('Waiting for you: log in to Facebook in the Chrome window, then close that window.');
+      el('connect').textContent = s.session.status === 'ok' ? 'Log in again' : 'Log in to Facebook';
+      el('ack').checked = s.risk_acknowledged;
+      el('ack').disabled = s.risk_acknowledged;
+      el('connect').disabled = !s.risk_acknowledged || !!s.busy;
+      el('scan').disabled = !!s.busy;
+      el('lastrun').textContent = JSON.stringify(s.current_run ?? s.last_run, null, 2);
+      const [t, k, d, p, m, sec] = await Promise.all([api('/targets'), api('/keywords'), api('/doctor'), api('/platforms'), api('/missions'), api('/secrets')]);
+      for (const [key, st] of Object.entries(sec)) { const e = el('k-' + key); if (e) { e.textContent = '(' + st + ')'; e.className = st === 'set' ? 'ok' : ''; } }
+      if (sec.YOUTUBE_API_KEY === 'set' || sec.REDDIT_CLIENT_ID === 'set') el('step-keys').innerHTML = '&#10003; API keys saved.';
+      if (m.length) el('step-claude').innerHTML = '&#10003; ' + m.length + ' mission' + (m.length === 1 ? '' : 's') + ' set up. In Claude, type <b>/start</b> to see what you can ask.';
+      el('missions').innerHTML = m.map((x) => `<label style="margin:6px 0"><input type="checkbox" data-mission="${x.id}" ${x.status === 'active' ? 'checked' : ''}>
+          <span><b>${esc(x.name)}</b> <small>(${esc(x.template)})</small><br><small>${esc(x.goal)}</small><br>
+          <small>${x.counts.pending ?? 0} to review · ${(x.counts.kept ?? 0) + (x.counts.context ?? 0)} kept · searches: ${esc(x.effective_queries.slice(0, 5).join(', ') || '—')}</small></span></label>`
+      ).join('') || '<p>No missions yet — run <code>/setup</code> in Claude Cowork.</p>';
+      el('platforms').innerHTML = p.map((x) => {
+        const state = !x.enabled ? 'off' : !x.configured ? `needs ${x.needs}` : x.ready === 'yes' ? 'ready' : x.ready;
+        const cls = !x.enabled ? '' : x.ready === 'yes' ? 'ok' : 'bad';
+        return `<label style="margin:6px 0"><input type="checkbox" data-platform="${esc(x.platform)}" ${x.enabled ? 'checked' : ''}>
+          <span><b>${esc(x.label)}</b> <small class="${cls}">${esc(state)}</small>
+          <small> · ${x.targets} target${x.targets === 1 ? '' : 's'}${x.account_risk ? ' · uses your account' : ' · no account needed'}</small></span></label>`;
+      }).join('');
+      const issues = d.checks.filter((c) => c.status === 'warn' || c.status === 'fail');
+      el('doctor').innerHTML = issues.map((c) =>
+        `<li class="${c.status === 'fail' ? 'bad' : ''}"><b>${esc(c.check)}</b> <small>(${esc(c.area)})</small>: ${esc(c.detail)}${c.fix ? `<br><small>→ ${esc(c.fix)}</small>` : ''}</li>`
+      ).join('') || '<li class="ok">All checks passed.</li>';
+      el('targets').innerHTML = t.map((x) => `<li>${esc(x.name || x.url)} <small>(${esc(x.kind)}, ${esc(x.status)}, ${esc(x.priority)})</small></li>`).join('') || '<li>none</li>';
+      el('keywords').innerHTML = k.map((x) => `<li>${esc(x.keyword)}${x.enabled ? '' : ' <small>(disabled)</small>'}</li>`).join('') || '<li>none</li>';
+    } catch (e) { msg(e.message, true); }
+  }
+
+  el('missions').addEventListener('change', async (e) => {
+    const id = e.target.dataset && e.target.dataset.mission;
+    if (!id) return;
+    try {
+      await api('/missions/' + id + '/status', { method: 'POST', body: JSON.stringify({ status: e.target.checked ? 'active' : 'paused' }) });
+      msg(`Mission ${e.target.checked ? 'resumed' : 'paused'}.`);
+      refresh();
+    } catch (err) { msg(err.message, true); e.target.checked = !e.target.checked; }
+  });
+  el('platforms').addEventListener('change', async (e) => {
+    const name = e.target.dataset && e.target.dataset.platform;
+    if (!name) return;
+    try {
+      await api('/platforms/' + encodeURIComponent(name), { method: 'PATCH', body: JSON.stringify({ enabled: e.target.checked }) });
+      msg(`${name} ${e.target.checked ? 'enabled' : 'disabled'}.`);
+      refresh();
+    } catch (err) { msg(err.message, true); e.target.checked = !e.target.checked; }
+  });
+  el('ack').addEventListener('change', async (e) => {
+    if (!e.target.checked) return;
+    try { await api('/session/acknowledge-risk', { method: 'POST', body: JSON.stringify({ acknowledged: true }) }); refresh(); }
+    catch (err) { msg(err.message, true); }
+  });
+  el('connect').addEventListener('click', async () => {
+    try { const r = await api('/session/connect', { method: 'POST', body: '{}' }); msg(r.message); setTimeout(refresh, 2000); }
+    catch (err) { msg(err.message, true); }
+  });
+  el('savekeys').addEventListener('click', async () => {
+    const body = {};
+    document.querySelectorAll('[data-key]').forEach((i) => { if (i.value.trim()) body[i.dataset.key] = i.value.trim(); });
+    if (!Object.keys(body).length) { el('keysmsg').textContent = 'Type a key first.'; return; }
+    try {
+      await api('/secrets', { method: 'PUT', body: JSON.stringify(body) });
+      document.querySelectorAll('[data-key]').forEach((i) => { i.value = ''; });
+      el('keysmsg').textContent = 'Saved. It works right away.'; el('keysmsg').className = 'ok';
+      refresh();
+    } catch (err) { el('keysmsg').textContent = err.message; el('keysmsg').className = 'bad'; }
+  });
+  el('scan').addEventListener('click', async () => {
+    try { await api('/scan', { method: 'POST', body: '{}' }); msg('Scan started.'); setTimeout(refresh, 1500); }
+    catch (err) { msg(err.message, true); }
+  });
+  refresh();
+  setInterval(refresh, 10000);
+})();
+</script>
+</body>
+</html>

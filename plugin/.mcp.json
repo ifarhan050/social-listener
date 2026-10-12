@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "social-listener": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/mcp-proxy.js"]
+    }
+  }
+}

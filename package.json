@@ -1,0 +1,23 @@
+{
+  "name": "social-listener",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "service",
+    "plugin-mcp"
+  ],
+  "scripts": {
+    "start": "npm run start -w service",
+    "connect": "npm run connect -w service",
+    "doctor": "npm run doctor -w service --",
+    "test": "npm test -w service",
+    "typecheck": "npm run typecheck -w service && npm run typecheck -w plugin-mcp",
+    "build": "npm run build -w service && npm run build:plugin",
+    "build:plugin": "npm run bundle -w plugin-mcp",
+    "package:plugin": "npm run build:plugin && node scripts/package-plugin.mjs",
+    "package:release": "npm run package:plugin && node scripts/package-release.mjs"
+  },
+  "socialListener": {
+    "repo": "ifarhan050/social-listener"
+  }
+}

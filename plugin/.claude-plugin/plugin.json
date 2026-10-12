@@ -1,0 +1,6 @@
+{
+  "name": "social-listener",
+  "version": "0.2.0",
+  "description": "Find what people say on Facebook, news, YouTube, Reddit and RSS: complaints, scams, leads, competitors or any topic. Read-only and human-paced. Type /start to begin.",
+  "author": { "name": "Farhan Irfan" }
+}
