@@ -7,6 +7,7 @@
 //     install.ps1, install.sh       the installers (repo filled in)
 //     social-listener-plugin.zip    upload this in Claude -> Customize -> Plugins
 // Run `npm run package:plugin` first (the release script does it for you).
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { configuredRepo, installerWithRepo, toLf, writeZip } from './zip.mjs';
@@ -35,3 +36,13 @@ const entries = [
 const out = path.join(root, 'dist', 'Social-Listener-Setup.zip');
 const size = writeZip(out, entries);
 console.log(`${path.relative(root, out)}: v${version}, ${entries.length} files, ${size} bytes (repo ${repo})`);
+
+// social-listener.plugin: the plugin zip under the name Cowork shows as an installable card
+// (INSTALL.md has Claude download it). SHA256SUMS.txt lets Claude verify every asset.
+const dotPlugin = path.join(root, 'dist', 'social-listener.plugin');
+fs.copyFileSync(plugin, dotPlugin);
+const assets = [out, plugin, dotPlugin];
+const sums = assets.map((f) => `${crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex')}  ${path.basename(f)}`).join('\n') + '\n';
+fs.writeFileSync(path.join(root, 'dist', 'SHA256SUMS.txt'), sums);
+fs.writeFileSync(path.join(root, 'dist', 'VERSION.txt'), `${version}\n`);
+console.log(`dist/social-listener.plugin, dist/SHA256SUMS.txt, dist/VERSION.txt (v${version})`);

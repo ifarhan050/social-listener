@@ -10,21 +10,33 @@ Everything runs locally on your computer and is read-only. The original specific
 
 ## Quick start (plug and play)
 
-**For users: paste one link into Claude. No zips to upload, no terminal.**
+**For users: paste one message into Claude Cowork. That's it.**
 
-1. In the Claude app, open **Customize → Plugins → Add marketplace**, paste
-   ```
-   https://github.com/ifarhan050/social-listener
-   ```
-   then **Install** the **Social Listener** plugin. To get updates without doing anything, turn on **Sync automatically** for that marketplace.
-2. **Open a Cowork chat and type `/setup`.** Claude:
-   - installs the helper app on your computer (no admin rights; it gets its own private copy of Node.js if needed, and starts automatically at login);
-   - asks what you want to find and creates a **mission**;
-   - logs you in to Facebook once, if you want Facebook (a Chrome window opens: log in, then close it; the login is kept);
-   - runs a first search.
-3. **Type `/start` any time** to see what you can ask, with [sample prompts](prompts/getting-started.md) filled in for your missions.
+```
+Install Social Listener for me by following https://github.com/ifarhan050/social-listener/blob/main/INSTALL.md
+I agree to install it on this computer.
+I want to find: complaints and scams about [my brand].
+```
 
-**If `/setup` says the helper can't start** (this happens on computers without Node.js), download `Social-Listener-Setup.zip` from the [latest release](https://github.com/ifarhan050/social-listener/releases/latest), unzip it, and double-click **Install on Windows** or **Install on Mac**. If Windows says it protected your PC, click *More info* → *Run anyway*. On a Mac, right-click → *Open*. Then quit and reopen Claude and type `/setup` again. The same zip also has the plugin, if you'd rather upload it.
+Claude then:
+- **downloads the plugin** and shows it as a card. **Click accept**; Cowork requires that one click for any plugin;
+- **sets up everything else by itself:**
+  - a private copy of Node.js if the computer has none (checksum-verified, no admin rights);
+  - the app and its packages;
+  - a browser if Chrome or Edge is missing;
+  - start at every login;
+- **creates your mission** and runs a first search. Results are saved as a report and a CSV in your folder;
+- offers **Facebook** as an optional last step. You log in once in Facebook's own window; the login is kept.
+
+**Then:**
+- type **`/start`** any time to see what you can ask ([sample prompts](prompts/getting-started.md));
+- paste the same message again later to **update**.
+
+More "I want to find" examples and the update prompt are in [prompts/install.md](prompts/install.md).
+
+**Other ways to install:**
+- Claude app → **Customize → Plugins → Add marketplace** → `https://github.com/ifarhan050/social-listener`;
+- or the double-click installers in `Social-Listener-Setup.zip` from the [latest release](https://github.com/ifarhan050/social-listener/releases/latest).
 
 Everything after that happens in chat:
 - "Find 20 negative posts about [brand] from last month"

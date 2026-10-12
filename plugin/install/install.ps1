@@ -174,7 +174,7 @@ if ($DryRun) {
   elseif ($sys) { Write-Host "  1. Node.js: use the installed $sys" }
   else {
     Write-Host "  1. Node.js: download the latest LTS for win-$arch from https://nodejs.org/dist/index.json,"
-    Write-Host "     verify it against SHASUMS256.txt, unpack into $nodeDir, add it to your user PATH (no admin)"
+    Write-Host "     verify it against SHASUMS256.txt, unpack into $nodeDir (no admin, PATH unchanged)"
   }
   Write-Host "  2. Download $zipUrl"
   Write-Host "  3. Copy into $InstallDir (keeping service\data and service\.env)"
@@ -190,7 +190,6 @@ Write-Host "Installing into $InstallDir (no admin rights needed). This takes abo
 # 1. Node.js
 Step 1 'Checking Node.js'
 $nodeExe = $null
-$pathChanged = $false
 if (Test-Path (Join-Path $nodeDir 'node.exe')) { $nodeExe = Join-Path $nodeDir 'node.exe'; Info "Using the app's own Node.js ($(& $nodeExe -v))" }
 else {
   $sys = Find-SystemNode
@@ -203,8 +202,8 @@ else {
   }
 }
 if ($nodeExe -like "$nodeDir*") {
-  # Claude starts the plugin with "node": make the app's copy findable (user PATH, no admin).
-  $pathChanged = Add-ToUserPath $nodeDir
+  # The plugin's launcher finds this private copy itself, so the user PATH is left alone.
+  Remove-FromUserPath $nodeDir  # entry added by versions before 0.3
   $env:Path = "$nodeDir;$env:Path"
   $npm = Join-Path $nodeDir 'npm.cmd'
   $npx = Join-Path $nodeDir 'npx.cmd'
@@ -299,7 +298,6 @@ Write-Host ''
 Write-Host 'All done! The dashboard opened in your browser.' -ForegroundColor Green
 Write-Host ''
 Write-Host 'Next steps:' -ForegroundColor Green
-Write-Host '  1. In Claude, open Customize -> Plugins and upload social-listener-plugin.zip (skip if already added).'
-if ($pathChanged) { Write-Host '  2. Quit Claude completely (right-click its tray icon -> Quit) and open it again, so it can use the agent.' }
-else { Write-Host '  2. If Claude was open, restart it once.' }
-Write-Host '  3. In a Cowork chat, type /setup - Claude will guide you (including the Facebook login).'
+Write-Host '  1. If you haven''t yet, add the plugin: in a Claude Cowork chat paste'
+Write-Host '       Install Social Listener for me by following https://github.com/ifarhan050/social-listener/blob/main/INSTALL.md'
+Write-Host '  2. In a Cowork chat, type /setup - Claude will guide you (including the Facebook login).'

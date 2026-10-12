@@ -151,7 +151,7 @@ if [ "$DRY_RUN" = 1 ]; then
   elif sn=$(system_node); then echo "  1. Node.js: use the installed $sn"
   else
     echo "  1. Node.js: download the latest LTS for $PLAT-$ARCH from https://nodejs.org/dist/index.json,"
-    echo "     verify it against SHASUMS256.txt, unpack into $NODE_DIR, add it to your shell profile PATH"
+    echo "     verify it against SHASUMS256.txt, unpack into $NODE_DIR (no admin, PATH unchanged)"
   fi
   echo "  2. Download $ZIP_URL"
   echo "  3. Copy into $INSTALL_DIR (keeping service/data and service/.env)"
@@ -177,13 +177,9 @@ else
 fi
 if [ "$NODE" = "$NODE_DIR/bin/node" ]; then
   export PATH="$NODE_DIR/bin:$PATH"
-  # Claude starts the plugin with "node": make the app's copy findable.
+  # The plugin's launcher finds this private copy itself; undo PATH edits made by versions before 0.3.
   remove_profile_lines
-  for f in "$HOME/.zprofile" "$HOME/.bash_profile"; do
-    printf 'export PATH="%s/bin:$PATH" %s\n' "$NODE_DIR" "$PROFILE_MARK" >> "$f"
-  done
-  # Also link it where apps look by default, when that folder is writable without admin.
-  if [ -d /usr/local/bin ] && [ -w /usr/local/bin ] && [ ! -e /usr/local/bin/node ]; then ln -s "$NODE_DIR/bin/node" /usr/local/bin/node; fi
+  [ -L /usr/local/bin/node ] && [ "$(readlink /usr/local/bin/node)" = "$NODE_DIR/bin/node" ] && rm -f /usr/local/bin/node
 fi
 
 stop_running
@@ -263,9 +259,9 @@ for _ in $(seq 1 40); do [ -f "$CONN" ] && break; sleep 1; done
 
 printf '\n\033[32mAll done! The dashboard opened in your browser.\033[0m\n\n'
 echo "Next steps:"
-echo "  1. In Claude, open Customize -> Plugins and upload social-listener-plugin.zip (skip if already added)."
-echo "  2. Quit Claude completely (Cmd+Q) and open it again, so it can use the agent."
-echo "  3. In a Cowork chat, type /setup - Claude will guide you (including the Facebook login)."
+echo "  1. If you haven't yet, add the plugin: in a Claude Cowork chat paste"
+echo "       Install Social Listener for me by following https://github.com/__SOCIAL_LISTENER_REPO__/blob/main/INSTALL.md"
+echo "  2. In a Cowork chat, type /setup - Claude will guide you (including the Facebook login)."
 echo ""
 echo "Later: open the dashboard with $INSTALL_DIR/open-dashboard.sh"
 echo "Uninstall: bash $INSTALL_DIR/install/install.sh --uninstall"

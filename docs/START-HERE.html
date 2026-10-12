@@ -33,29 +33,25 @@
   <p class="lead">An assistant for Claude Cowork that finds what people are saying, on Facebook, news, YouTube, Reddit and RSS: complaints, scams, people looking for your services, competitors, or any topic. Version __VERSION__.</p>
 
   <section>
-    <h2><span class="n">1</span>Install the helper app (about 5 minutes)</h2>
-    <p>It runs on your computer and does the reading. You don't need admin rights or a terminal, and it sets up everything it needs.</p>
-    <div class="tabs">
-      <div class="os"><b>Windows</b>Double-click <code>Install on Windows.cmd</code>.<br><span class="muted">If Windows shows "Windows protected your PC", click <i>More info</i> &rarr; <i>Run anyway</i>.</span></div>
-      <div class="os"><b>Mac</b>Right-click <code>Install on Mac.command</code> &rarr; <i>Open</i> &rarr; <i>Open</i>.<br><span class="muted">If macOS blocks it: System Settings &rarr; Privacy &amp; Security &rarr; <i>Open Anyway</i>.</span></div>
-    </div>
-    <p>Keep the window open until it says <b class="ok">All done!</b> A page then opens in your browser; that's the agent's dashboard.</p>
+    <h2><span class="n">1</span>Paste one message into Claude Cowork</h2>
+    <p>Open a <b>Cowork</b> chat in the Claude app and paste this (change the last line to what you want to find):</p>
+    <div class="prompt">Install Social Listener for me by following https://github.com/__SOCIAL_LISTENER_REPO__/blob/main/INSTALL.md<br>I agree to install it on this computer.<br>I want to find: complaints and scams about [my brand].</div>
   </section>
 
   <section>
-    <h2><span class="n">2</span>Add the plugin to Claude</h2>
-    <ol>
-      <li>Open the Claude app &rarr; <b>Customize</b> &rarr; <b>Plugins</b> &rarr; <b>Add marketplace</b>, paste <code>https://github.com/__SOCIAL_LISTENER_REPO__</code>, then <b>Install</b> Social Listener. Turn on <b>Sync automatically</b> to get updates by themselves.<br>
-        <span class="muted">Or upload <code>social-listener-plugin.zip</code> from this folder instead.</span></li>
-      <li><b>Quit Claude completely</b> and open it again (Windows: right-click the tray icon &rarr; Quit; Mac: <kbd>Cmd</kbd>+<kbd>Q</kbd>).</li>
-    </ol>
+    <h2><span class="n">2</span>Click accept</h2>
+    <p>Claude shows a <b>Social Listener</b> plugin card. Click <b>accept</b>. Claude then sets up everything else by itself, including Node.js if needed, without admin rights, and runs your first search.</p>
+    <p class="muted">If Claude asks you to open a new chat, do that and type <code>/setup</code>.</p>
   </section>
 
   <section>
-    <h2><span class="n">3</span>Set it up by chatting</h2>
-    <p>Open a <b>Cowork</b> chat and type:</p>
-    <div class="prompt">/setup</div>
-    <p>Claude asks what you want to find, sets it up and runs a first search. If you want Facebook, Claude opens a Chrome window: <b>log in once, then close the window</b>. The login is kept, so you won't need to log in again.</p>
+    <h2><span class="n">3</span>Facebook (optional)</h2>
+    <p>If you want Facebook, Claude opens a Chrome window: <b>log in once, then close the window</b>. The login is kept.</p>
+  </section>
+
+  <section>
+    <h2>No Cowork chat handy?</h2>
+    <p>Double-click <code>Install on Windows.cmd</code> or, on a Mac, right-click <code>Install on Mac.command</code> &rarr; <i>Open</i>. Then add the plugin in Claude &rarr; <b>Customize</b> &rarr; <b>Plugins</b> &rarr; <b>Add marketplace</b> &rarr; <code>https://github.com/__SOCIAL_LISTENER_REPO__</code>.</p>
   </section>
 
   <section>

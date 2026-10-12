@@ -1,7 +1,7 @@
 // Zips plugin/ into dist/social-listener-plugin.zip with the manifest at the archive root.
 import fs from 'node:fs';
 import path from 'node:path';
-import { configuredRepo, installerWithRepo, writeZip } from './zip.mjs';
+import { configuredRepo, installerWithRepo, toLf, writeZip } from './zip.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const src = path.join(root, 'plugin');
@@ -32,6 +32,10 @@ for (const i of INCLUDE) walk(i);
 
 const size = writeZip(
   out,
-  files.map((name) => ({ name, data: fs.readFileSync(path.join(src, name)), executable: name.endsWith('.sh') })),
+  files.map((name) => {
+    const data = fs.readFileSync(path.join(src, name));
+    // Shell scripts must stay LF (bash/sh on macOS fail on CRLF) and executable.
+    return name.endsWith('.sh') ? { name, data: Buffer.from(toLf(data.toString('utf8'))), executable: true } : { name, data };
+  }),
 );
 console.log(`${path.relative(root, out)}: ${files.length} files, ${size} bytes`);

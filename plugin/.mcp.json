@@ -1,8 +1,12 @@
 {
   "mcpServers": {
     "social-listener": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/server/mcp-proxy.js"]
+      "command": "cmd",
+      "args": ["/d", "/c", "${CLAUDE_PLUGIN_ROOT}/server/launch.cmd"]
+    },
+    "social-listener-mac": {
+      "command": "/bin/sh",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/server/launch.sh"]
     }
   }
 }

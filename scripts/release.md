@@ -1,6 +1,6 @@
 # Publishing a release
 
-Users only ever download **`Social-Listener-Setup.zip`** from the GitHub release page. The installers inside it fetch the app's code from `main` of the repo set in `package.json` → `socialListener.repo` (currently `ifarhan050/social-listener`). The repo must be **public**.
+Users install by pasting the prompt from `prompts/install.md` into Cowork. Claude follows `INSTALL.md` and downloads `social-listener.plugin` from the latest release. The `Social-Listener-Setup.zip` double-click installers are the alternative. The installers inside it fetch the app's code from `main` of the repo set in `package.json` → `socialListener.repo` (currently `ifarhan050/social-listener`). The repo must be **public**.
 
 ## Steps
 1. **Bump the version** in the same 3 places so `get_status` can spot outdated installs:
@@ -18,9 +18,9 @@ Users only ever download **`Social-Listener-Setup.zip`** from the GitHub release
    ```
    This produces `dist/social-listener-plugin.zip` and `dist/Social-Listener-Setup.zip`. It also refreshes the generated copies in `plugin/install/` and `plugin/skills/*/prompts/`; commit those so the marketplace copy of the plugin matches.
 4. **Commit and push to `main`.** Installers download `main`, so push **before** publishing the release.
-5. **Publish the release:**
+5. **Publish the release.** `INSTALL.md` downloads `social-listener.plugin`, `SHA256SUMS.txt` and `VERSION.txt` from the *latest* release, so attach all five files:
    ```bash
-   gh release create v0.2.0 dist/Social-Listener-Setup.zip dist/social-listener-plugin.zip --title "Social Listener 0.2.0" --notes "What's new: ..."
+   gh release create v0.3.0 dist/social-listener.plugin dist/SHA256SUMS.txt dist/VERSION.txt dist/Social-Listener-Setup.zip dist/social-listener-plugin.zip --title "Social Listener 0.3.0" --notes "What's new: ..."
    ```
 
 ## Before announcing a release

@@ -13,20 +13,22 @@ Take someone from "just added the plugin" to "it found my first results", with a
 Never invent URLs, page names or keywords the user didn't give or approve.
 
 ## 0. Make sure the agent is installed and running
-0. **If the social-listener tools are missing** (there is no `get_status` tool, or every social-listener tool fails to start), the plugin's helper couldn't start on this computer, usually because Node.js isn't installed yet. Say this kindly and give one step:
-   - "Download **Social-Listener-Setup.zip** from https://github.com/ifarhan050/social-listener/releases/latest, unzip it, and double-click **Install on Windows** (or **Install on Mac**: right-click → Open). It sets everything up without admin rights. Then quit Claude completely, reopen it, and type /setup again."
-   - Stop there. Don't try to install anything from inside this chat.
+0. **If the social-listener tools are missing or fail with "still downloading"**, the plugin's helper is starting for the first time. If the computer had no Node.js, it's fetching a private copy by itself (up to a minute).
+   - Wait about 30 seconds and try `get_status` again, twice at most.
+   - If the tools still don't work, tell the user kindly: "Almost there. Please open a **new chat** and type **/setup** again." Stop.
+   - Last resort, only if a new chat doesn't help either: the **Social-Listener-Setup.zip** from https://github.com/ifarhan050/social-listener/releases/latest (double-click **Install on Windows** / **Install on Mac**).
 1. Call `get_status`. It starts the agent automatically if it's installed.
 2. **If it isn't installed** (the error says it isn't installed or running):
-   - Explain in one line: "The agent needs a small helper app on this computer. It does the reading and keeps your results here; nothing is sent to anyone else."
-   - Ask: "Install it now? It takes about 5 minutes and doesn't need admin rights."
-   - After a clear yes, call `install_service` with `confirm: true`. It sets up everything, including Node.js, privately.
-   - If it fails, show the "Setup stopped / What to do" lines from its output in plain words. The fallback is the **Social Listener Setup** download: double-click "Install on Windows" or "Install on Mac".
-3. If `get_status` shows `versions.update_available`, offer `update_service`. It takes a few minutes and keeps all data and the Facebook login.
+   - **Consent:** if the user's request already said they agree to install (e.g. "I agree to install it on this computer", or they asked you to follow INSTALL.md to install it), that's their consent. Don't ask again; just say "Setting up the agent on this computer; this takes a few minutes."
+     - Otherwise explain in one line: "The agent needs a small helper app on this computer. It does the reading and keeps your results here; nothing is sent to anyone else."
+     - Then ask once: "Install it now? It takes about 5 minutes and doesn't need admin rights."
+   - Call `install_service` with `confirm: true`. It sets up everything by itself: the app, its packages, the browser, and start at login.
+   - If it fails, show the "Setup stopped / What to do" lines from its output in plain words, and offer to try again once.
+3. If `get_status` shows `versions.update_available`, update with `update_service` (when the user asked for an install or update, that's consent; otherwise ask). It keeps all data and the Facebook login.
 4. Call `doctor`. Explain any ✖ item in one plain sentence with its fix, and skip the noise.
 
 ## 1. What do you want to find?
-- Ask in plain words, or use their filled prompt if they pasted one (the `prompts/*.md` style).
+- If the user's first message already said what to find ("I want to find: …"), use that and don't ask again. Otherwise ask in plain words, or use their filled prompt if they pasted one (the `prompts/*.md` style).
 - Map it to a template with `list_templates`:
   - **complaints:** problems, scams or negative talk about a brand or product;
   - **leads:** people **asking for** something the user offers (a tutor, a plumber, a product);
