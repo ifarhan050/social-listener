@@ -21617,7 +21617,7 @@ var dashboardLink = (conn) => `${conn.url.replace(/\/+$/, "")}/#token=${conn.tok
 
 // src/index.ts
 var NOT_RUNNING = 'The social-listener agent is not installed or not running on this computer yet. Type /setup and I will install or start it for you (or run "Install on Windows" / "Install on Mac" from the Social Listener Setup download).';
-var PLUGIN_VERSION = "0.2.0";
+var PLUGIN_VERSION = "0.2.1";
 var CONNECTION_FILE = path3.join(os.homedir(), ".social-listener", "connection.json");
 function connection() {
   if (process.env.SOCIAL_LISTENER_URL && process.env.SOCIAL_LISTENER_TOKEN)

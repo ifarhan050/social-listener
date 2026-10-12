@@ -10,21 +10,21 @@ Everything runs locally on your computer and is read-only. The original specific
 
 ## Quick start (plug and play)
 
-**For users: no terminal, no admin rights, nothing to install by hand.**
+**For users: paste one link into Claude. No zips to upload, no terminal.**
 
-1. **Download** `Social-Listener-Setup.zip` from the [latest release](https://github.com/ifarhan050/social-listener/releases/latest) and unzip it.
-2. **Install the helper app:**
-   - **Windows:** double-click `Install on Windows.cmd`. If you see "Windows protected your PC", click *More info* → *Run anyway*.
-   - **Mac:** right-click `Install on Mac.command` → *Open*. If macOS blocks it, go to System Settings → Privacy & Security → *Open Anyway*.
-
-   It sets up everything it needs: it downloads its own private copy of Node.js if you don't have one, and installs nothing system-wide. It also starts automatically when you log in, and opens the dashboard when it's done.
-3. **Add the plugin to Claude:** Customize → Plugins → upload `social-listener-plugin.zip` (it's in the same folder). Then **quit Claude completely and reopen it**.
-4. **In a Cowork chat, type `/setup`.** Claude:
-   - asks what you want to find;
-   - creates a **mission**;
+1. In the Claude app, open **Customize → Plugins → Add marketplace**, paste
+   ```
+   https://github.com/ifarhan050/social-listener
+   ```
+   then **Install** the **Social Listener** plugin. To get updates without doing anything, turn on **Sync automatically** for that marketplace.
+2. **Open a Cowork chat and type `/setup`.** Claude:
+   - installs the helper app on your computer (no admin rights; it gets its own private copy of Node.js if needed, and starts automatically at login);
+   - asks what you want to find and creates a **mission**;
    - logs you in to Facebook once, if you want Facebook (a Chrome window opens: log in, then close it; the login is kept);
    - runs a first search.
-5. **Type `/start` any time** to see what you can ask, with [sample prompts](prompts/getting-started.md) filled in for your missions.
+3. **Type `/start` any time** to see what you can ask, with [sample prompts](prompts/getting-started.md) filled in for your missions.
+
+**If `/setup` says the helper can't start** (this happens on computers without Node.js), download `Social-Listener-Setup.zip` from the [latest release](https://github.com/ifarhan050/social-listener/releases/latest), unzip it, and double-click **Install on Windows** or **Install on Mac**. If Windows says it protected your PC, click *More info* → *Run anyway*. On a Mac, right-click → *Open*. Then quit and reopen Claude and type `/setup` again. The same zip also has the plugin, if you'd rather upload it.
 
 Everything after that happens in chat:
 - "Find 20 negative posts about [brand] from last month"

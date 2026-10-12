@@ -1,6 +1,9 @@
 {
   "name": "social-listener",
-  "owner": { "name": "Farhan Irfan" },
+  "owner": {
+    "name": "Farhan Irfan"
+  },
+  "description": "Social Listener for Claude Cowork: find complaints, scams, leads, competitors or any topic on Facebook, news, YouTube, Reddit and RSS.",
   "plugins": [
     {
       "name": "social-listener",

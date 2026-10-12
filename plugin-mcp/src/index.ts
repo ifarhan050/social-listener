@@ -22,7 +22,7 @@ const NOT_RUNNING =
   'The social-listener agent is not installed or not running on this computer yet. Type /setup and I will install or start it for you (or run "Install on Windows" / "Install on Mac" from the Social Listener Setup download).';
 
 /** Plugin version; get_status compares it with the service's version. */
-const PLUGIN_VERSION = '0.2.0';
+const PLUGIN_VERSION = '0.2.1';
 
 interface Conn {
   url: string;

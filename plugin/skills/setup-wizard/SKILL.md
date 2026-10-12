@@ -13,6 +13,9 @@ Take someone from "just added the plugin" to "it found my first results", with a
 Never invent URLs, page names or keywords the user didn't give or approve.
 
 ## 0. Make sure the agent is installed and running
+0. **If the social-listener tools are missing** (there is no `get_status` tool, or every social-listener tool fails to start), the plugin's helper couldn't start on this computer, usually because Node.js isn't installed yet. Say this kindly and give one step:
+   - "Download **Social-Listener-Setup.zip** from https://github.com/ifarhan050/social-listener/releases/latest, unzip it, and double-click **Install on Windows** (or **Install on Mac**: right-click → Open). It sets everything up without admin rights. Then quit Claude completely, reopen it, and type /setup again."
+   - Stop there. Don't try to install anything from inside this chat.
 1. Call `get_status`. It starts the agent automatically if it's installed.
 2. **If it isn't installed** (the error says it isn't installed or running):
    - Explain in one line: "The agent needs a small helper app on this computer. It does the reading and keeps your results here; nothing is sent to anyone else."
